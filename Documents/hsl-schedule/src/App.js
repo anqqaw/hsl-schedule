@@ -48,7 +48,7 @@ function App() {
     return <div>Loading...</div>;
   }
 
-  if (schedule) {
+  if (!schedule) {
     return <div>No schedule available.</div>;
   }
 
