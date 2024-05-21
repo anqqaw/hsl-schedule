@@ -1,15 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
 import { useEffect, useState } from 'react';
+import './App.css';
 
 function App() {
-  const [schedule, setSchedule] = useState();
+  const [schedule, setSchedule] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
 
   useEffect(() => {
     const ENDPOINT = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql';
-    const CODE = 'API-key'
+    const CODE = 'API-CODE'
   
     const query = `{
       stop(id: HSL:2112401) {
@@ -33,39 +31,45 @@ function App() {
         'Accept':'application/json',
         'digitransit-subscription-key':`${CODE}`,
       },
-      body:JSON.stringify( {query} )  
+      body: JSON.stringify({ query })
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
-        console.log(data);
+        console.log('WORKS');
+        setSchedule(data.stop);
       })
       .catch(error => {
+        setLoading(false);
         console.log('Error:', error);
       });
-  });
+  }, []);
+
+  if (!loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (schedule) {
+    return <div>No schedule available.</div>;
+  }
 
   return (
     <div>
-      <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
-          {schedule.name.replace('Leppävaaran asema', '')}
-        </h1>
-
+      <h1>
+        Leppävaaran asema
+      </h1>
+      <table>
         <tbody>
-            {schedule.stoptimesWithoutPatterns.map((stoptime, index) => (
+            {schedule && schedule.map((stoptime, index) => (
               <tr key={index}>
-                <td className="p-2 border-b border-white text-xl md:text-8xl">{stoptime.trip.route.shortName}</td>
-                <td className="p-2 border-b border-white text-xl md:text-7xl">{stoptime.headsign}</td>
-                <td className="p-2 border-b border-white text-xl md:text-8xl">
-                  <span className="pr-1">11.30</span>
+                <td>{stoptime.trip.route.shortName}</td>
+                <td>{stoptime.headsign}</td>
+                <td>
+                  <span>11.30</span>
                 </td>
               </tr>
             ))}
           </tbody>
+        </table>
     </div>
   );
 }
