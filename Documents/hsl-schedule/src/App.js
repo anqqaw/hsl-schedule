@@ -24,7 +24,7 @@ function App() {
           realtimeState
           headsign
         }
-      }  
+      }
     }`;
   
     fetch(ENDPOINT, {
@@ -36,14 +36,12 @@ function App() {
       },
       body: JSON.stringify({ query })
     })
-      .then(function(response) {
-        if(response.ok) {
-          return response.text();
-        }
-        throw new Error('Something went wrong');
-      })
+      .then(response => response.json())
       .then(data => {
-        setSchedule(data.data);
+        console.log(data.data.stop);
+        setSchedule(data);
+        setLoading(false);
+        console.log(schedule);
       })
       .catch(error => {
         setLoading(false);
@@ -51,7 +49,7 @@ function App() {
       });
   }, []);
 
-  if (!loading) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
@@ -66,14 +64,17 @@ function App() {
       </h1>
       <table>
         <tbody>
-            {schedule.map((item) => (
-              <tr key={item.name}>
-                <td>{item.trip.route.shortName}</td>
-                <td>{item.headsign}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          {schedule.map((item, index) => (
+            <tr key={index}>
+              <td>{item.trip.route.shortName}</td>
+              <td>{item.headsign}</td>
+              <td>
+                <span>{new Date(item.realtimeArrival * 1000).toLocaleTimeString()}</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
