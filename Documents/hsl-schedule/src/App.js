@@ -7,18 +7,21 @@ function App() {
 
   useEffect(() => {
     const ENDPOINT = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql';
-    const CODE = 'API-CODE'
+    const CODE = '95bcc82b681a4d8ab35a4813ca1390f2'
   
     const query = `{
-      stop(id: HSL:2112401) {
+      stop(id: "HSL:2112401") {
         name
         stoptimesWithoutPatterns(numberOfDepartures: 3) {
           scheduledArrival
+          realtimeArrival
           trip {
             route {
               shortName
             }
           }
+          realtime
+          realtimeState
           headsign
         }
       }  
@@ -33,16 +36,21 @@ function App() {
       },
       body: JSON.stringify({ query })
     })
-      .then(response => response.json())
+      .then(function(response) {
+        if(response.ok) {
+          return response.text();
+        }
+        throw new Error('Something went wrong');
+      })
       .then(data => {
-        console.log('WORKS');
+        console.log(data);
         setSchedule(data.stop);
       })
       .catch(error => {
         setLoading(false);
         console.log('Error:', error);
       });
-  }, []);
+  });
 
   if (!loading) {
     return <div>Loading...</div>;
