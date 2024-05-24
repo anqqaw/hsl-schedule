@@ -43,21 +43,20 @@ function App() {
         throw new Error('Something went wrong');
       })
       .then(data => {
-        console.log(data);
-        setSchedule(data.stop);
+        setSchedule(data.data);
       })
       .catch(error => {
         setLoading(false);
         console.log('Error:', error);
       });
-  });
+  }, []);
 
   if (!loading) {
     return <div>Loading...</div>;
   }
 
   if (!schedule) {
-    return <div>No schedule available.</div>;
+    return <div>No schedule available</div>;
   }
 
   return (
@@ -67,13 +66,10 @@ function App() {
       </h1>
       <table>
         <tbody>
-            {schedule && schedule.map((stoptime, index) => (
-              <tr key={index}>
-                <td>{stoptime.trip.route.shortName}</td>
-                <td>{stoptime.headsign}</td>
-                <td>
-                  <span>11.30</span>
-                </td>
+            {schedule.map((item) => (
+              <tr key={item.name}>
+                <td>{item.trip.route.shortName}</td>
+                <td>{item.headsign}</td>
               </tr>
             ))}
           </tbody>
