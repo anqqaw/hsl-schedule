@@ -32,22 +32,24 @@ function App() {
       headers: {
         'Content-Type':'application/json',
         'Accept':'application/json',
-        'digitransit-subscription-key':`${CODE}`,
+        'digitransit-subscription-key': CODE,
       },
       body: JSON.stringify({ query })
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data.data.stop);
-        setSchedule(data);
+        setSchedule(data.data.stop.stoptimesWithoutPatterns);
         setLoading(false);
-        console.log(schedule);
       })
       .catch(error => {
         setLoading(false);
         console.log('Error:', error);
       });
   }, []);
+
+  useEffect(() => {
+    console.log('Schedule state:', schedule);
+  }, [schedule]);
 
   if (loading) {
     return <div>Loading...</div>;
