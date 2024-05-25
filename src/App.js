@@ -38,7 +38,6 @@ function App() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data.data);
         setSchedule(data.data.stop.stoptimesWithoutPatterns);
         setLoading(false);
       })
