@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     const ENDPOINT = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql';
-    const CODE = '95bcc82b681a4d8ab35a4813ca1390f2'
+    const CODE = process.env.REACT_APP_APIKEY; 
   
     const query = `{
       stop(id: "HSL:2112401") {
