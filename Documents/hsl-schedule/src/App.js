@@ -47,10 +47,6 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    console.log('Schedule state:', schedule);
-  }, [schedule]);
-
   if (loading) {
     return <div>Loading...</div>;
   }
