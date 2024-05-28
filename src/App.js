@@ -89,7 +89,7 @@ function App() {
         onClick={nextTheme}
         className="mt-4 py-2 px-4 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-700 transition duration-300"
       >
-        Vaihda Teema
+        Switch Theme
       </button>
     </div>
   );
